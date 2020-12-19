@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login.html 로그인이닷</title>
+</head>
+<body> {# 로그인 전 로그인 후 같은 페이지  url를 나오게 함. #}
+{# 원래는 login_ok와 login_form을 이용해서 했었는데, 지금은 그럴 필요가 없음..!#}
+
+{% if session["logFlag"] == False %}
+<form action="/account/login" method = "post">
+    아이디 : <input type="text" name="id"><br>
+    비밀번호 : <input type="password" name="pw"><br>
+    <input type="submit" value="로그인">
+</form>
+{% else %}
+{{id}}님 로그인 성공 <br>
+<a href = "/account/logout">로그아웃</a>
+{% endif %} {# 이렇게 if마지막은 무조건 이거 써줘야함.#}
+</body>
+</html>
