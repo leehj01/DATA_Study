@@ -1,0 +1,109 @@
+<!doctype html> 
+<html>
+<head> <title> 여기에 제목을 </title> 
+<link rel = "stylesheet" type ="text/css" href = "default.css"/>
+<style>
+p {
+	margin-left:20px;
+	background-color:khaki;
+}
+</style>
+</style>
+</head>
+<body>
+<h1> 오늘은 css하는 날 </h1>
+<div> 
+<p> orem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+<p style = "background-color :peachpuff"> orem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+<p> orem Ipsum is <span>simply dummy text</span> of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+<p> orem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+<p id = "unique"> orem Ipsum is simply dummy text of the printing and typesetting industry. 
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+when an unknown printer took a galley of type and scrambled it to make a type specimen book. </p>
+<div class = "my_color"> orem Ipsum is simply <span> dummy text of the printing</span> and typesetting industry. </div>
+<a href = "http://coderby.com"> 링크1 클릭 </a> <br>
+<a href = "http://naver.com"> 링크2 클릭 </a><br>
+</div>
+<form>
+이메일 : <input type ="text" name = "email" disabled><br>
+주소   : <input type = "text" name = "address">
+</form>
+
+<table border = 1 width = 100%>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+<tr>
+	<td> 1</td> <td>2</td> <td>3</td><td>4</td>
+</tr>
+</table>
+
+<head>
+<meta charset = "UTF-8" >
+<title> 가상 클래스 선택자 </title>
+<style type =" text/css">
+div:hover{
+	background-color:red;
+	}
+div:active{
+	background-color:blue;
+	}
+input:focus { 
+	background-color:purple;
+	}
+/* 체크박스와 라이도는 배경색 지정이 안됩니다 */
+input:radio{
+	background-color:red;
+	}
+input: disabled{
+	background-color:cyon;
+	}
+</style>
+</head>
+<body>
+<div> 여기에 마우스를 올리면 색이 변합니다  </div>
+<form>
+아이디 : <input type ="text" name = "userid"><br>
+비번   : <input type = "password" name = "password" disabled>
+성별 : <label><input type = "radio" name = "sex" value="M" >남자</label>
+			<input type = "radio" name = "sex" value="F" >여자</label>
+<input type = "submit">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<html>
+<head>
+<title> 빨강 파랑 </title>
+<style rel = "stylesheet">
+.red {
+	background-color : red
+}
+.blue{
+	background-color:blue
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>버튼을 클릭하세요 </h1>
+<input type="button" id = "red" value = " 빨강 ">
+<input type="button" id = "blue" value = " 파랑 ">
+<div id = "content"></div>
+<input type = "text" id= "result" disabled>
+</body>
+<script>
+
+red_el = document.querySelector("#red") // 선택자를 이용해서 질의함.
+// console.log(red_el)
+blue_el = document.querySelector("#blue") // 선택자를 이용해서 질의함.
+// console.log(blue_el)
+content_el = document.querySelector("#content");
+result_el = document.querySelector("#result");
+data = "";
+for (i=0 ; i<10; i++){
+	console.log(i);
+}
+function h(){
+	console.log("hello");
+}
+setInterval(h,1000); // 아래 코드를 함수로 만든것 
+
+
+//setInterval(function(){
+	//if(isStop == false) { // 안보이게 하는 거지만, 사실은 계속 돌아가고 있음. 
+	//console.log("hello");
+	//}
+//},1000); //1초에 한번씩 브라우저 닫을때까지 계속 반복함 
+
+
+
+function red_blue_click(event){  // 함수로 만들어줘서 반복을 피함 
+	//console.log("파랑버튼");
+	console.log(event)
+	if (event.target == red_el){
+		console.log("빨강");
+		data = data + "빨강";
+		console.log(content_el);
+		content_el.innerHTML = data;
+		result_el.value="빨강색";
+		//this.classList.add("red");	// this 이벤트 핸들 안에서 자기 자신을 의미함. classList 클래스 리스트에 red추가
+		//blue_el.classList.remove("blue");
+		document.querySelector("body").classList.add("red");
+		document.querySelector("body").classList.remove("blue");
+	}else {
+		console.log("파랑");
+		console.log(content_el)
+		content_el.innerHTML = "파랑";
+		result_el.value="파란색";
+		//this.classList.add("blue");	// this 이벤트 핸들 안에서 자기 자신을 의미함. classList 클래스 리스트에 red추가
+		//blue_el.classList.remove("red");
+		document.querySelector("body").classList.add("blue")
+		document.querySelector("body").classList.remove("red")
+	}
+}
+red_el.onclick = red_blue_click;  // 여기서 선언해주면 됨. 
+blue_el.onclick = red_blue_click;
+
+// 위의 코드를 개별로 적용하면 아래 처럼 됨. 
+/*
+function blue_el.onclick(event){
+	console.log("파랑버튼");
+	this.classList.add("blue")
+	red_el.classList.remove("red");
+	document.querySelector("h1").classList.add("blue")   // element를 찾는 것이 먼저! "h1" 말고 다른 태그를 넣으면 
+	document.querySelector("h1").classList.remove("red")	// 그곳에 이벤트를 적용할 수 있음! 
+*/
+/*
+blue_el.onclick = function(event){
+	console.log("파랑버튼");
+	this.classList.add("blue")
+	red_el.classList.remove("red");
+	document.querySelector("h1").classList.add("blue")   // element를 찾는 것이 먼저! "h1" 말고 다른 태그를 넣으면 
+	document.querySelector("h1").classList.remove("red")	// 그곳에 이벤트를 적용할 수 있음! 
+	
+}
+*/
+</script>
+</html>
