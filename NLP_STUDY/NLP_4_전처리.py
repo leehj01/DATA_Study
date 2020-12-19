@@ -32,7 +32,7 @@ if __name__ == "__main__":
         if line.strip() != "": # 이건 굳이 없어도 되지만. .. 넣은 것 같음
             line = re.sub(r'([a-z])\.([A-Z])', r'\1. \2', line.strip())
 
-            sentences = sent_tokenize(line.strip())  # 이 함수를 사용하면, 문장단위로 나누어주고 리스트 형식으로 만들어 줌 
+            sentences = sent_tokenize(line.strip())  # 이 함수를 사용하면, 문장단위로 나누어주고 리스트 형식으로 만들어 줌 .
             print(sentences, '\n')
             
             for s in sentences:
