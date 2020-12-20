@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang= "ko">
+<head>
+<meta charset="utf-8">
+<title> 제이쿼리 </title>
+<style rel = "stylesheet">
+.bgred{
+	background-color: sandybrown;
+}
+.fgblue{
+	color : black
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+/*
+$(document).ready(function(){
+	console.log("ready")
+	console.log($("div").html());
+});
+*/
+$(function() {  //위아래 같은 코드임
+	console.log("ready2")
+	console.log($("div").html())
+	//$("div").css("background-color","red");
+	//$("div").next().css("color","blue")
+	//$("#title").css("color","red"); // 글자 색을 바꿈
+	//$("ul li:eq(1)").css("color","red"); // 목록중에 두번째
+	$("ol li:gt(1)").css("color","coral");//인덱스가 1보다 큰애를 변해줌
+	$("ul li:nth-of-type(2n+1)").css("color","lightsalmon ");
+	//ulists= $("ul li");
+	$("ul li").each(function(){  // 배열에 저장된 문서 객체만큼 메서드가 반복 실행
+		console.log("Hello");
+	})
+	/* 위에랑 같은 코드임
+	$.each($("ul li"), function(){
+		console.log("Hello")
+	})
+	*/
+	$("ul li").each(function(index,obj){  // ul을 index li을 dbj에 넣어서 함
+		console.log(index);
+		console.log(obj);
+	})
+	$("div > span").html("<b>new</b>") //아래랑 구별 애는 new만들어가고
+  //$("div > span").text("<b>new</b>") // 애는 <b>new</b> 전체가 span 대신 들어가게됨.
+	$("input[name=email]").val("Hello")
+	//$("div#title").css("background-color","red")
+	//$("div#title").css("color","blue");
+	$("div#title").addClass("bgred")
+	$("div#title").addClass("fgblue")
+	/*
+	function btnevent(){
+
+}
+	$("input[type=button]").click(btnevent);
+
+	$("input[type=button]").click(function(){
+		data = $("input[name=email]").val();
+		$("input[name=email]").val("");
+		$("#title").text(data); // 글이 써진다
+	})
+	*/
+
+	$("input[type=button]").on(
+		{"click mouseover" : function(){ // click 뒤에 다른 이벤트를 넣어도됨
+			data = $("input[name=email]").val();
+			$("input[name=email]").val("");
+			$("#title").text(data);
+		}
+	});
+	$("#btn").delegate(
+		".btn1",
+		"click" ,
+		function(){
+			//console.log("클릭...");  == p320
+			$.ajax({
+				url:"http://httpbin.org",
+				type :"get",
+				data:{"name":"kilong"},
+				dataType:"html", // kilong 의 데이터 타입 f12누르면 확인 가능
+				success:function(data){
+					//console.log(data);
+					el=$(data)[3];
+					console.log(el);
+					$("#title").text(el.innerHTML);
+				},
+				error:function(){
+					console.log("Error");
+				}
+			})
+		}
+	);
+});
+
+</script>
+
+</head>
+<body>
+<h1> 제이쿼리 테스트입니다 </h1>
+<input type ="text" name = "email" size = 40>
+<p>
+<input type="button" value="입력" >
+<p>
+<div id="title"> 하나 둘 셋</div>
+<p>
+<div id="btn">
+	<input type="button" class="btn1" value="입력1">
+	<input type="button" class="btn2"value="입력2">
+	<input type="button" class="btn3" value="입력3">
+	<input type="button" class="btn4" value="입력4">
+</div>
+<div  name = "email" size = 40> Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been <span>the industrys standard <i>dummy</i> text ever since the 1500s,
+when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+<b>It has survived not only five centuries,</b> but also the leap into electronic typesetting, remaining essentially unchanged.
+It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,</span>
+and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</div>
+<div>
+<ul>
+<li> Why do we use it?
+	<li> It is a long established fact
+	<li> that a reader will be distracted
+	<li> by the readable content of a page when looking at its layout.
+	<li> It is a long established fact
+	<li> that a reader will be distracted
+	<li> by the readable content of a page when looking at its layout.
+</ul>
+<ol>
+	<li> The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,
+	<li>  as opposed to using Content here, content here, making it look like readable English.
+	<li> Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text,
+	<li>  and a search for lorem ipsum will uncover many web sites still in their infancy.
+	<li> Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+</ol>
+</div>
+</body>
+</html>

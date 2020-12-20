@@ -1,0 +1,42 @@
+h1 { 
+	background-color : sandybrown
+}
+#unique{
+	background-color : khaki;
+}
+p {
+		background-color : peachpuff
+}
+
+div span { 
+	background-color : tan;
+	padding : 10px
+}
+
+div > span {
+	background-color : bisque;
+}
+
+.my_color{
+	background-color : moccasin;
+}
+
+a[href*=by] { 
+	text-decoration:none
+}
+
+a:hover {
+	text-decoration:underline
+}
+
+:focus{
+	background-color : blue
+}
+
+table > tr {
+	background-color : moccasin;
+}
+
+tr:nth-of-type(2n+1) {
+	background-color:#999999
+}

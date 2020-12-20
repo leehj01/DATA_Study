@@ -1,0 +1,50 @@
+<html>
+<head>
+<title> 빨강 파랑 </title>
+<style rel = "stylesheet">
+.red {
+	background-color : red
+}
+.blue{
+	background-color:blue
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>버튼을 클릭하세요 ( 제이쿼리 예문 ) </h1>
+<input type="button" id = "red" value = " 빨강 ">
+<input type="button" id = "blue" value = " 파랑 ">
+<div id = "content"></div>
+<input type = "text" id= "result" disabled>
+</body>
+<script>
+
+red_el = $("#red") // $() 하면 객체를 찾아줌. document로 찾아준 거랑 다름
+blue_el = $("#blue") // 그래서 매소드 속성이 다다르게됨. 
+content_el = $("#content");
+result_el = $("#result");
+data = "";
+
+function red_blue_click(event){  // 함수로 만들어줘서 반복을 피함 
+	//console.log("파랑버튼");
+	console.log(event)
+	$("body").removeAttr("class"); // 바디테그를 찾아서 removeAttr를함. - 해당 속성을 삭제함
+	
+	if (event.target.id == red_el.attr("id")){ // 현재 이벤트 객체의 타켓은 id속성을 가져오고. 뒤의 id와 같으면. 
+												// .attr() 인수로 하나면 그 속성을 반환 두개면 변환?
+		content_el.html("빨강"); // 태그와 태그의 값을 변경하거나 반환할때 사용.  아무것도 안집어넣으면 반환함/ 뭘집어넣으면 변경
+		result_el.val("빨강색"); // value와 같은 아무것도 안집어넣으면 반환함/ 뭘집어넣으면 변경
+		$("body").attr("class","red") // .attr() 인수로 하나면 그 속성을 반환 두개면 변환?
+	}else {
+		content_el.html("파랑")
+		result_el.val("파랑색")
+		$("body").attr("class","blue") // 이렇게 두개가 되어있으면 변경하는 것.!! 하나면 반환! 
+	}
+}
+red_el.click(red_blue_click)  // 여기서 선언해주면 됨. 
+blue_el.click(red_blue_click);
+
+// 자바 스크립은 속성을 변경시켜줌 = 할당해서 바꿔점 제이쿼리는 점부다 함수로 되어있음. 
+</script>
+</html>
