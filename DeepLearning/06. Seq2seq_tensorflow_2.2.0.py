@@ -33,7 +33,7 @@ NUM_WORDS = 2000
 class Encoder(tf.keras.Model):
     def __init__(self):
         super(Encoder, self).__init__()
-        self.emb = tf.keras.layers.Embedding(NUM_WORDS, 64) # 원핫 형태로 들어오면 인베딩을 먼저 해줌  그래서 우리가 원하는 실수로 바꿔줌
+        self.emb = tf.keras.layers.Embedding(NUM_WORDS, 64) # 원핫 형태로 들어오면 인베딩을 먼저 해줌  그래서 우리가 원하는 실수로 바꿔줌.
         self.lstm = tf.keras.layers.LSTM(512, return_state = True ) # lstm을 이용해서 state를 뽑게 됨. 
         # state를 return 하게 해줘야 , hidden 과 cell state를 return 하게 됨. 기본적으로 false 하게 됨. 
         # 다음 계층으로 넘어갈것만 있고, 아래의 h ,c 의 값이 안나오므로 꼭 TRUE로 해줘야함  

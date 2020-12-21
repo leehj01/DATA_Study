@@ -28,7 +28,7 @@ NUM_WORDS = 10000 # 분석을 하기위해서 만개의 단어만 사용하겠�
 
 
 # ## 모델정의
-# - 여기서 SimplerRNN -> LSTM 으로 바꾸어주면, LSTM으로 바뀌게 됨. 혹은 GRU로 바꾸면 GRU가 됨 
+# - 여기서 SimplerRNN -> LSTM 으로 바꾸어주면, LSTM으로 바뀌게 됨. 혹은 GRU로 바꾸면 GRU가 됨 .
 
 class MyModel(tf.keras.Model):
     def __init__(self):

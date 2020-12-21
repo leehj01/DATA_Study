@@ -75,7 +75,7 @@ class Decoder(tf.keras.Model):
         # hidden / cell 출력은 train할때는 필요없지만 test할 때는 이것이 필요함. 
         # lstm이 y_(shifted output)과 initial_state를 받아서 모든 sequnce출력을 내줌'
         # S : hiddenstate를 전부다 모아둔 것이 됨 - 이것을 가지고 쿼리로 사용하게 됨 
-        # 쿼리로 사용할 때, 신경써야 할것 : 한 타입 스텝 앞선것으로 사용함 
+        # 쿼리로 사용할 때, 신경써야 할것 : 한 타입 스텝 앞선것으로 사용함 .
         # H : 키와 벨류로 사용 
         
         S_ = tf.concat([s0[:, tf.newaxis ,:], S[:, :-1, :]], axis= 1) # 1 + 63 길이 사용
