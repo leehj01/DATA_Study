@@ -64,9 +64,13 @@ print(one_hot)
 # - 원핫 벡터로는 단어간의 계층적 구조라는 특징을 잘 반영할 수 없기 때문에, 잘 구축되어진 데이터 베이스를 이용한다. 그럿을 '시소러스(어휘분류사전)이라고 부르는데 그 중 대표적인 것이 '워드넷'이 있다.
 
 import nltk
-nltk.download('wordnet')
+#nltk.download('wordnet')
+
+# wn.sysets을 하면 하나의 노드의 경로만 나타나게 된다.
+wn.synsets('student')
 
 # +
+# 최상단 노드까지 구하기 위해서 코드를 작성함 for 구문으로 해서 얻을 수 있음
 from nltk.corpus import wordnet as wn
 
 def hypernyms(word):
@@ -83,33 +87,48 @@ def hypernyms(word):
             
 for h in hypernyms('student'):
     print(h)
-# -
-
+    
 [h for h in hypernyms('student')]
 
-wn.synsets('student')
+"""
+Synset('student.n.01')
+Synset('enrollee.n.01')
+Synset('person.n.01')
+Synset('causal_agent.n.01')
+Synset('physical_entity.n.01')
+Synset('entity.n.01')
+"""
 
 
 # +
+# 두개의 단어를 구할 수 있다. 
 def distance(word1, word2):
     word1_hypernyms = [h for h in hypernyms(word1)]
+#     print('word1_hypernymsw : ', word1_hypernyms)
     
     for i, word2_hypernym in enumerate(hypernyms(word2)):
+        print(word2_hypernym)
         try:
             return i + word1_hypernyms.index(word2_hypernym)
+        
         except ValueError:
             continue
 
 distance('dog', 'cat')
 
 # +
+# 최하단 노드 간의 최단 거리를 알 수 있고, 이것을 유사도로 치환하여 활용할 수 있음
+# 거리가 멀수록 단어간의 유사도는 떨어짐. 
+
 import numpy as np
 
 def similarity(word1, word2):
     return -np.log(distance(word1, word2))
 
-print(similarity('dog', 'student'))
-print(similarity('dog', 'cat'))
+print('개와 책의 유사도 : ' , similarity('dog', 'book'))
+print('개와 고양이의 유사도 : ' , similarity('dog', 'cat'))
 # -
+
+
 
 
