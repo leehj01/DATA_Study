@@ -17,13 +17,14 @@
 # ## 원핫인코딩 함수 구현
 
 from konlpy.tag import Okt
+
 okt = Okt()
 token = okt.morphs("나는 사과를 좋아한다")
 print(token)
 
 # 각 토큰에 대한 고유한 인텍스 부여 ( 빈도수대로 정렬하기도 함 )
 word2index = {}
-for i in token :
+for i in token:
     if i not in word2index.keys():
         word2index[i] = len(word2index)
 print(word2index)
@@ -31,8 +32,8 @@ print(word2index)
 
 # 원핫 인코딩 함수
 def one_hot_encoding(word, word2index):
-    one_hot_vector = [0]*(len(word2index))
-    index  = word2index[word]
+    one_hot_vector = [0] * (len(word2index))
+    index = word2index[word]
     one_hot_vector[index] = 1
     return one_hot_vector
 
@@ -56,7 +57,7 @@ print(token.word_index)
 encoded = token.texts_to_sequences([text])
 print(encoded)
 
-one_hot= to_categorical(encoded)
+one_hot = to_categorical(encoded)
 print(one_hot)
 # -
 
@@ -64,69 +65,78 @@ print(one_hot)
 # - 원핫 벡터로는 단어간의 계층적 구조라는 특징을 잘 반영할 수 없기 때문에, 잘 구축되어진 데이터 베이스를 이용한다. 그럿을 '시소러스(어휘분류사전)이라고 부르는데 그 중 대표적인 것이 '워드넷'이 있다.
 
 import nltk
-#nltk.download('wordnet')
+# nltk.download('wordnet')
 
 # wn.sysets을 하면 하나의 노드의 경로만 나타나게 된다.
-wn.synsets('student')
+from nltk.corpus import wordnet as wn
+
+wn.synsets('pen')
 
 # +
 # 최상단 노드까지 구하기 위해서 코드를 작성함 for 구문으로 해서 얻을 수 있음
 from nltk.corpus import wordnet as wn
 
+
 def hypernyms(word):
     current_node = wn.synsets(word)[0]
     yield current_node
-    
-    while True :
-        try :
+
+    while True:
+        try:
             current_node = current_node.hypernyms()[0]
             yield current_node
-            
-        except IndexError :
+
+        except IndexError:
             break
-            
-for h in hypernyms('student'):
+
+
+for h in hypernyms('pen'):
     print(h)
-    
-[h for h in hypernyms('student')]
 
 """
-Synset('student.n.01')
-Synset('enrollee.n.01')
-Synset('person.n.01')
-Synset('causal_agent.n.01')
+Synset('pen.n.01')
+Synset('writing_implement.n.01')
+Synset('implement.n.01')
+Synset('instrumentality.n.03')
+Synset('artifact.n.01')
+Synset('whole.n.02')
+Synset('object.n.01')
 Synset('physical_entity.n.01')
 Synset('entity.n.01')
 """
 
+[h for h in hypernyms('pen')]
+
 
 # +
-# 두개의 단어를 구할 수 있다. 
+# 두개 단어의 거리를 구할 수 있다.
 def distance(word1, word2):
     word1_hypernyms = [h for h in hypernyms(word1)]
-#     print('word1_hypernymsw : ', word1_hypernyms)
-    
+
     for i, word2_hypernym in enumerate(hypernyms(word2)):
-        print(word2_hypernym)
         try:
             return i + word1_hypernyms.index(word2_hypernym)
-        
+
         except ValueError:
             continue
 
-distance('dog', 'cat')
+
+print('책과 개의 거리 :', distance('book', 'dog'))  # 책과 개의 거리 : 16
+print('고양이와 개의 거리 :', distance('dog', 'cat'))  # 고양이와 개의 거리 : 4
 
 # +
 # 최하단 노드 간의 최단 거리를 알 수 있고, 이것을 유사도로 치환하여 활용할 수 있음
-# 거리가 멀수록 단어간의 유사도는 떨어짐. 
+# 거리가 멀수록 단어간의 유사도는 떨어짐.
 
 import numpy as np
+
 
 def similarity(word1, word2):
     return -np.log(distance(word1, word2))
 
-print('개와 책의 유사도 : ' , similarity('dog', 'book'))
-print('개와 고양이의 유사도 : ' , similarity('dog', 'cat'))
+
+print('개와 책의 유사도 : ', similarity('dog', 'book'))  # 개와 책의 유사도 :  -2.772588722239781
+print('개와 고양이의 유사도 : ', similarity('dog', 'cat'))  # 개와 고양이의 유사도 :  -1.3862943611198906
 # -
 
 
