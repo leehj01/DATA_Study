@@ -265,7 +265,7 @@ def get_tf(docs):
     return pd.DataFrame(stats, columns=('word',
                                         'frequency',
                                         'doc1',
-                                        'doc2',
+                                        'doc2',,
                                         'doc3',
                                         )).sort_values('frequency', ascending=False)
 
