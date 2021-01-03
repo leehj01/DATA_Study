@@ -265,7 +265,7 @@ def get_tf(docs):
     return pd.DataFrame(stats, columns=('word',
                                         'frequency',
                                         'doc1',
-                                        'doc2',,
+                                        'doc2',
                                         'doc3',
                                         )).sort_values('frequency', ascending=False)
 
@@ -294,14 +294,16 @@ import pandas as pd
 
 
 # 함께 출현한 빈도수를 나타내는 함수
-def get_context_counts(lines, w_size=5):
+def get_context_counts(lines, w_size=2):
     co_dict = defaultdict(int)
 
     for line in lines:
         words = line.split()
 
         for i, w in enumerate(words):
-            for c in words[i - w_size: i + w_size]:
+            l_ind = max(i - w_size + 1, 0)
+            r_ind = i + w_size
+            for c in words[l_ind: r_ind]:
                 if w != c:
                     co_dict[(w, c)] += 1
 
@@ -351,7 +353,8 @@ co
 tem = ['I like to watch movies', 'I like icecream', 'I enjoy flying', 'I like to eat desert']
 
 # +
-co_dict = get_context_counts(tem, w_size=2)
+co_dict = get_context_counts(tem, w_size=3)
+print(co_dict)
 tfs = get_term_frequency(' '.join(tem))
 coc = co_occurrence(co_dict, tfs.index)
 print(coc)
@@ -362,5 +365,9 @@ torch.save(coc, 'coc.pth')
 coc = torch.load('coc.pth')
 coc
 # -
+
+
+
+
 
 
