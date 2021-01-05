@@ -29,21 +29,22 @@ lines = lines.strip().split('\n')
 
 def get_context_counts(lines, w_size=2):
     co_dict = defaultdict(int)
-    
+
     for line in lines:
         words = line.split()
-        
+
         for i, w in enumerate(words):
-            l_ind = max(i-w_size+1, 0)
-            r_ind = i+w_size
+            l_ind = max(i - w_size + 1, 0)
+            r_ind = i + w_size
             for c in words[l_ind:r_ind]:
                 if w != c:
                     co_dict[(w, c)] += 1
-            
+
     return pd.Series(co_dict)
 
 
 co_dict = get_context_counts(lines)
+
 
 def get_term_frequency(document, word_dict=None):
     if word_dict is None:
@@ -55,6 +56,7 @@ def get_term_frequency(document, word_dict=None):
 
     return pd.Series(word_dict).sort_values(ascending=False)
 
+
 tfs = get_term_frequency(' '.join(lines))
 stanford_index = ['I', 'like', 'enjoy', 'deep', 'learning', 'NLP', 'flying', '.']
 tfs = tfs[stanford_index]
@@ -62,21 +64,21 @@ tfs = tfs[stanford_index]
 
 def co_occurrence(co_dict, vocab):
     data = []
-    
+
     for word1 in vocab:
         row = []
-        
+
         for word2 in vocab:
             try:
                 count = co_dict[(word1, word2)]
             except KeyError:
                 count = 0
             row.append(count)
-            
+
         data.append(row)
-    
+
     return pd.DataFrame(data, index=vocab, columns=vocab)
-        
+
 
 # -
 
@@ -84,14 +86,15 @@ def co_occurrence(co_dict, vocab):
 # ### 예제를 위한 데이터셋 만들기
 
 # +
-# # !git clone https://github.com/e9t/nsmc  
-#  네이버 영화 평점 데이터 셋 
+# # !git clone https://github.com/e9t/nsmc
+#  네이버 영화 평점 데이터 셋
 
 # +
 # %%time
 # 데이터 불러오기
 import pandas as pd
 import torch
+
 corpus = pd.read_csv('./nsmc/ratings_train.txt', sep='\t').document.values[:10000]
 
 # 데이터를 토크나이즈 하기 - POS와 단어로 나눔
@@ -103,8 +106,8 @@ results = []
 for line in corpus:
     pos_result = tagger.pos(line)
     results.append(pos_result)
-    
-# 토크나이즈 한 것들을 다시, 문장 형태로 해줌 
+
+# 토크나이즈 한 것들을 다시, 문장 형태로 해줌
 corpus = [' '.join([c[0] for c in line]) for line in results]
 # -
 
@@ -113,37 +116,37 @@ corpus = [' '.join([c[0] for c in line]) for line in results]
 # +
 from konlpy.tag import Mecab
 
-def count_seen_geadwords(lines, predicate= "VV", headword= 'NNG'):
+
+def count_seen_geadwords(lines, predicate="VV", headword='NNG'):
     """
     코퍼스를 받고 문장 내에서 술어(동사, W)와 표제어(명사, NNG)를 찾
     Seen_R(w) 함수를 구성
     """
-    
-    tagger= Kkma()
+
+    tagger = Kkma()
     seen_dict = {}
-    
+
     for line in lines:
         pos_result = tagger.pos(line)
-        
+
         word_h, word_p = None, None
-        for word, pos in pos_result :
+        for word, pos in pos_result:
             if pos == predicate or pos[:3] == predicate + '+':
                 word_p = word
                 break
-                
+
             if pos == headword:
                 word_h = word
-                
+
             if word_h is not None and word_p is not None:
                 seen_dict[word_p] = [word_h] + ([] if seen_dict.get(word_p) is None else seen_dict[word_p])
-                
-            
+
         return seen_dict
 
 
 # -
 
-# 스터디원 코드 
+# 스터디원 코드
 def count_seen_headwords(lines, tagger=None, predicate='VV', headword='NNG'):
     """
     코퍼스를 받고 문장 내에서 술어(동사, W)와 표제어(명사, NNG)를 찾
@@ -165,13 +168,13 @@ def count_seen_headwords(lines, tagger=None, predicate='VV', headword='NNG'):
                 word_h = word
         if word_h is not None and word_p is not None:
             seen_dict[word_p] = [word_h] + \
-                ([] if seen_dict.get(word_p) is None else seen_dict[word_p])
+                                ([] if seen_dict.get(word_p) is None else seen_dict[word_p])
     return seen_dict
 
 
-# ### 주어진 술어와 표제어에 대해서 선택 관련도 점수를 구하는 함수 
-# - 단어사이의 유사도를 구하기 위해서 이전에 구성한 특징 벡터들을 담은 판다스 데이터 프레임을 받음 
-# - 그럼 metric으로 주어진 함수를 통해 유사도를 계산함 
+# ### 주어진 술어와 표제어에 대해서 선택 관련도 점수를 구하는 함수
+# - 단어사이의 유사도를 구하기 위해서 이전에 구성한 특징 벡터들을 담은 판다스 데이터 프레임을 받음
+# - 그럼 metric으로 주어진 함수를 통해 유사도를 계산함
 
 def get_selectional_association(
         predicate, headword, lines, dataframe, metric):
@@ -187,7 +190,7 @@ def get_selectional_association(
             total += metric(v1, v2)
         except:
             pass
-        
+
     return total
 
 
@@ -214,6 +217,7 @@ def get_selectional_association(
 
 # +
 from functools import partial
+
 
 def wsd(predicate, headwords):
     selectional_associations = []
@@ -246,7 +250,7 @@ def wsd(predicate, headwords):
 # ### 실행함수들  
 
 def get_cosine_similarity(x1, x2):
-    return (x1 * x2).sum() / ((x1**2).sum()**.5 * (x2**2).sum()**.5)
+    return (x1 * x2).sum() / ((x1 ** 2).sum() ** .5 * (x2 ** 2).sum() ** .5)
 
 
 # +
@@ -257,6 +261,6 @@ tfs = get_term_frequency(' '.join(corpus))
 co = co_occurrence(co_dict, tfs.index[:1000])
 torch.save(co, 'co.pth')
 
-wsd('보', ['동화', '영화','배우' ])
+wsd('보', ['동화', '영화', '배우'])
 
 # 보다라는 동사에 대한 유사도 
