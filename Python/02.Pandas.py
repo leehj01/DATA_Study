@@ -74,6 +74,79 @@ data
 data.loc[:, '바'] = '언어'
 data
 
+# # pandas dataframe에 여러개의 빈열 추가
+
+data["B"] = None
+data["C"] = None
+data["D"] = None
+data
+
+data[["솔", "라", "시"]] = None
+data
+
+pd.concat([data,pd.DataFrame(columns=list('EFG'))])
+
+# # 데이터 프레임에 한 행을 추가하기
+
+# ## 1) .loc[index] 메소드
+# - ignore_index는 사전을append()함수에 전달할 때 True으로 설정됩니다. 그렇지 않으면 오류가 발생합니다.
+
+# +
+# python 3.x
+import pandas as pd
+# List of Tuples
+fruit_list = [ ('Orange', 34, 'Yes' )]
+
+#Create a DataFrame object
+df = pd.DataFrame(fruit_list, columns = ['Name' , 'Price', 'Stock'])
+
+#Add new ROW
+df.loc[1]=[ 'Mango', 4, 'No' ]
+df.loc[2]=[ 'Apple', 14, 'Yes' ]
+print(df)
+# -
+
+# ## 2) dic을 행으로 추가하여 pandas 데이터 프레임에 추가 
+
+# python 3.x
+import pandas as pd
+# List of Tuples
+fruit_list = [ ('Orange', 34, 'Yes' )]
+#Create a DataFrame object
+df = pd.DataFrame(fruit_list, columns = ['Name' , 'Price', 'Stock'])
+#Add new ROW
+df=df.append({'Name' : 'Apple' , 'Price' : 23, 'Stock' : 'No'} , ignore_index=True)
+df=df.append({'Name' : 'Mango' , 'Price' : 13, 'Stock' : 'Yes'} , ignore_index=True)
+print(df)
+
+# ## 3) 행을 추가하는 데이터 프레임 append() 메소드
+
+# +
+import pandas as pd
+fruit_list = [ ('Orange', 34, 'Yes' )]
+
+df = pd.DataFrame(fruit_list, columns = ['Name' , 'Price', 'Stock'])
+print("Original DataFrame:")
+print(df)
+print('.............................')
+print('.............................')
+
+new_fruit_list = [ ('Apple', 34, 'Yes','small' )]
+
+dfNew = pd.DataFrame(new_fruit_list, columns = ['Name' , 'Price', 'Stock','Type'])
+print("Newly Created DataFrame:")
+print(dfNew)
+print('.............................')
+print('.............................')
+
+#append one dataframe to othher
+df=df.append(dfNew,ignore_index=True)
+print("Copying DataFrame to orignal...")
+print(df)
+# -
+
+
+
 # # 인덱스 세팅과 재설정
 
 # ## 1) 배정을 통한 인덱스 설정
@@ -102,7 +175,9 @@ data
 
 data.set_index('도')
 
-# ## dataframe의 열의 리셋 (reset_index 메서드 )
+
+
+# ## dataframe의 index의 리셋 (reset_index 메서드 )
 #
 
 # - 만약 멀티 index를 가지고 있다면, level 을 통해서 선택해서 리셋해줄수있다. 
@@ -118,20 +193,6 @@ data.set_index('도')
 # -
 
 data.reset_index()
-
-# # pandas dataframe에 여러개의 빈열 추가
-
-data["B"] = None
-data["C"] = None
-data["D"] = None
-data
-
-data[["솔", "라", "시"]] = None
-data
-
-pd.concat([data,pd.DataFrame(columns=list('EFG'))])
-
-
 
 # ## Group by 기초
 
