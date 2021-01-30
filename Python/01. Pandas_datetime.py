@@ -124,7 +124,7 @@ data['days_in_month'] = data['time'].dt.days_in_month # 월 일수(숫자) (=day
 data
 
 # # 3. 기타
-# - add datetime : 데이트 타임의 시간을 늘리거나 뺄 수 있다.
+# ## 01. add datetime : 데이트 타임의 시간을 늘리거나 뺄 수 있다.
 
 import datetime
 data = pd.read_csv('datatime_exa.csv')
@@ -137,5 +137,21 @@ data['time_add'] += datetime.timedelta(days = 1)
 data['time_subtract'] -= datetime.timedelta(days = 1)
 
 data
+
+# ## 02. 시간의 중간값을 구하기
+
+# +
+import pandas as pd
+import numpy as np
+import datetime
+
+list_of_dates = ['2019-11-20', '2020-01-02', '2020-02-05','2020-03-10','2020-04-16','2020-05-01']
+employees=['Hisila', 'Shristi','Zeppy','Alina','Jerry','Kevin']
+df = pd.DataFrame({'Joined date': pd.to_datetime(list_of_dates)},index=employees)
+
+mask = (df['Joined date'] > '2019-06-1') & (df['Joined date'] <= '2020-02-05')
+filtered_df=df.loc[mask]
+print(filtered_df)
+# -
 
 
