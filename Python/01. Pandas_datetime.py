@@ -140,6 +140,8 @@ data
 
 # ## 02. 시간의 중간값을 구하기
 
+# ### 01. 부울 마스크를 사용하여 두 날짜 사이의 행 선택
+
 # +
 import pandas as pd
 import numpy as np
@@ -152,6 +154,37 @@ df = pd.DataFrame({'Joined date': pd.to_datetime(list_of_dates)},index=employees
 mask = (df['Joined date'] > '2019-06-1') & (df['Joined date'] <= '2020-02-05')
 filtered_df=df.loc[mask]
 print(filtered_df)
+# +
+import pandas as pd
+import numpy as np
+import datetime
+
+list_of_dates = ['2019-11-20', '2020-01-02', '2020-02-05','2020-03-10','2020-04-16','2020-05-01']
+employees=['Hisila', 'Shristi','Zeppy','Alina','Jerry','Kevin']
+salary=[200,400,300,500,600,300]
+df = pd.DataFrame({"Name":employees,'Joined date': pd.to_datetime(list_of_dates),"Salary":salary})
+df = df.set_index(['Joined date'])
+
+filtered_df=df.loc['2019-06-1':'2020-02-05']
+print(filtered_df)
+# -
+
+
+# ### 두 날짜 사이의 dataframe행을 선택하는 pandas.dataframe.query()
+
+# +
+import pandas as pd
+import numpy as np
+import datetime
+
+list_of_dates = ['2019-11-20', '2020-01-02', '2020-02-05','2020-03-10','2020-04-16','2020-05-01']
+employees=['Hisila', 'Shristi','Zeppy','Alina','Jerry','Kevin']
+salary=[200,400,300,500,600,300]
+df = pd.DataFrame({"Name":employees,'Joined_date': pd.to_datetime(list_of_dates),"Salary":salary})
+
+filtered_df=df.query("Joined_date >= '2019-06-1' and Joined_date <='2020-02-05'")
+print(filtered_df)
+
 # -
 
 
