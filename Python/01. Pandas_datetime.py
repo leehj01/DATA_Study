@@ -187,4 +187,37 @@ print(filtered_df)
 
 # -
 
+# ### isin사용
+
+# +
+import pandas as pd
+import numpy as np
+import datetime
+
+list_of_dates = ['2019-11-20', '2020-01-02', '2020-02-05','2020-03-10','2020-04-16','2020-05-01']
+employees=['Hisila', 'Shristi','Zeppy','Alina','Jerry','Kevin']
+salary=[200,400,300,500,600,300]
+df = pd.DataFrame({"Name":employees,'Joined_date': pd.to_datetime(list_of_dates),"Salary":salary})
+
+
+filtered_df = df[df["Joined_date"].isin(pd.date_range('2019-06-1', '2020-02-05'))]
+print(filtered_df)
+# -
+
+# ### between() 두 날짜 사이에서 행 선택
+
+# +
+import pandas as pd
+import numpy as np
+import datetime
+
+list_of_dates = ['2019-11-20', '2020-01-02', '2020-02-05','2020-03-10','2020-04-16','2020-05-01']
+employees=['Hisila', 'Shristi','Zeppy','Alina','Jerry','Kevin']
+salary=[200,400,300,500,600,300]
+df = pd.DataFrame({"Name":employees,'Joined_date': pd.to_datetime(list_of_dates),"Salary":salary})
+
+filtered_df =df.loc[df["Joined_date"].between('2019-06-1', '2020-02-05')]
+print(filtered_df)
+# -
+
 
