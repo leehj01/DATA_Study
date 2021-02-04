@@ -14,7 +14,14 @@
 #     name: python3
 # ---
 
+import pandas as pd
+
+data = pd.read_csv('info_user.csv')
+data = data[:1000]
+
 # ## Group by 기초
+
+data
 
 # +
 # 한개 열을 기준으로 집계
@@ -86,7 +93,7 @@ for name, group in grouped:
     print(group)
 # -
 
-# ### 특정 key값을 가진 구룹의 정보만 추출 가능
+# ### 특정 key값을 가진 그룹의 정보만 추출 가능
 # - 추출된 group 정보에는 3가지 유형의 apply가 가능함
 #     - aggregation : 요약된 통계정보를 추출해줌
 #     - transformation : 해당정보를 변환해줌
@@ -104,6 +111,19 @@ grouped.agg(np.mean)
 grouped['포인트'].agg([np.sum, np.mean, np.std])
 
 ## 2. trainsformation : agg와 달리 key값 별로 요약된 정보가 아니라, 개별 데이터의 변환을 지원함
+
+
+# +
+## 3. filter  : 특정조건으로 데이터를 검색할 때 사용
+
+df.groupby('고객번호').filter(lambda x: len(x) > 2)
+
+# +
+# filter안에는 boolean 조건이 존재해야함. len(x)는 grouped된 dataframe의 개수ㅜ
+# -
+
+df.groupby('고객번호').filter(lambda x: x['수량'].sum() > 10)
+
 
 
 # ## 조건에 따른 데이터 프레임 누적합 계산
