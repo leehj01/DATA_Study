@@ -14,45 +14,44 @@
 #     name: python3
 # ---
 
-import pandas as pd
-
-data = pd.read_csv('info_user.csv')
-data = data[:1000]
-
 # ## Group by 기초
 
-data.drop('Unnamed: 0', inplace = True, axis = 1)
-data
-
 # +
-# 한개 열을 기준으로 집계
-
+# 데이터 프레임을 만들어 주기
 import pandas as pd
-df = pd.DataFrame({'상품번호' : ['P1', 'P1', 'P2', 'P2'],
-                   '수량' :     [2, 3, 5, 10]})
+df = pd.DataFrame({'user_id' : ['C1', 'C2', 'C2', 'C2','C3', 'C3', 'C3', 'C3','C1','C4'],
+                   'product_id' : ['P1', 'P1', 'P2', 'P2','P3', 'P3','P4', 'P4','P4','P4'],
+                   'buy_cnt' :     [20, 3, 5, 10,5, 7, 8, 9, 4, 10],
+                  'point' : [70, 200, 100, 50, 100, 200, 100,20, 50 , 200],
+                   'time' : [ '2015-10-14 06:58', '2015-10-14 06:58', '2015-11-14 14:46',
+                        '2015-11-14 14:48', '2015-10-14 17:27', '2015-10-14 18:55',
+                            '2016-10-14 06:58' , '2016-11-14 15:01' ,'2016-10-14 15:12', '2016-10-14 15:30']}
+)
+
+import datetime
+df.time = df['time'].apply(lambda _ : datetime.datetime.strptime(_,  '%Y-%m-%d %H:%M'))
 # -
 
-# ### 1. 한개 열을 기준으로 집계 
+df
 
-data.groupby( by = ['entered_competition_cnt']).sum()[:10]
+# # 기본적인 GROUPBY
+
+# ### 1. 한개 열을 기준으로 집계 
 
 # - count, min, mean, sum, max ,cumsum 이 있다.
 
 # min: 상품번호별 판매된 최소 수량
-df.groupby(by=['상품번호'], as_index=False).min()  # as_index를 false로 해주면, 인덱스로 가지 않아서 , 활용이 편함
+df.groupby(by=['product_id']).min()
 
-# max: 상품번호별 판매된 최대 수량
-df.groupby(by=['상품번호'], as_index=False).max()
+# ### 2. 여러개 열을 기준으로 집계
 
-# 여러개 열을 기준으로 집계할 떄
-import pandas as pd
-df = pd.DataFrame({'고객번호' : ['C1', 'C2', 'C2', 'C2'],
-                   '상품번호' : ['P1', 'P1', 'P2', 'P2'],
-                   '수량' :     [2, 3, 5, 10],
-                  '포인트' : [100, 200, 100, 50 ]})
-
-df_grouped = df.groupby(['고객번호','상품번호'])['포인트'].sum()
+df_grouped = df.groupby(['product_id','user_id']).sum()
 df_grouped
+
+df_grouped = df.groupby(['product_id','user_id'], as_index = False).sum()
+df_grouped
+
+
 
 df_grouped.index
 
@@ -113,7 +112,7 @@ grouped.agg(np.mean)
 # 특정 컬럼에 여러개의 function을 apply할 수 도있음
 grouped['포인트'].agg([np.sum, np.mean, np.std])
 
-## 2. trainsformation : agg와 달리 key값 별로 요약된 정보가 아니라, 개별 데이터의 변환을 지원함
+# # 2. trainsformation : agg와 달리 key값 별로 요약된 정보가 아니라, 개별 데이터의 변환을 지원함
 
 
 # +
@@ -143,6 +142,8 @@ df
 
 df['cumsum'] = df.groupby((df.NUM == 10).cumsum()).ENERGY.cumsum() 
 df
+
+
 
 
 
