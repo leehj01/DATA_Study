@@ -21,6 +21,7 @@ data = data[:1000]
 
 # ## Group by 기초
 
+data.drop('Unnamed: 0', inplace = True, axis = 1)
 data
 
 # +
@@ -31,7 +32,9 @@ df = pd.DataFrame({'상품번호' : ['P1', 'P1', 'P2', 'P2'],
                    '수량' :     [2, 3, 5, 10]})
 # -
 
-df
+# ### 1. 한개 열을 기준으로 집계 
+
+data.groupby( by = ['entered_competition_cnt']).sum()[:10]
 
 # - count, min, mean, sum, max ,cumsum 이 있다.
 
