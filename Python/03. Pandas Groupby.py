@@ -45,18 +45,20 @@ df.groupby(by=['product_id']).min()
 
 # ### 2. 여러개 열을 기준으로 집계
 
-df_grouped = df.groupby(['product_id','user_id']).sum()
+df.groupby(['product_id','user_id']).sum()
+
+df_grouped = df.groupby(['product_id','user_id'])['point'].sum()
 df_grouped
 
-df_grouped = df.groupby(['product_id','user_id'], as_index = False).sum()
-df_grouped
+df.groupby(['product_id','user_id'], as_index = False).sum()
 
+# ## 2. INDEX 다루기
 
-
+df_grouped = df.groupby(['product_id','user_id'])['point'].sum()
 df_grouped.index
 
 # - groupby 명령의 결과물도 결국 dataframe이기 때문에,
-# 두개의 column으로 gropbt할 경우, index가 두개 생성된다.
+# 두개의 column으로 gropby할 경우, index가 두개 생성된다.
 
 # group으로 묶여진 데이터를 matrix형태로 전환해줌.
 df_grouped.unstack()
@@ -65,9 +67,9 @@ df_grouped.unstack()
 # 인덱스 level을 변경할 수 있다.
 # -
 
-df_grouped.swaplevel()
+df_grouped.sort_index(level = 1 )
 
-df_grouped.swaplevel().sortlevel(0)
+df_grouped.swaplevel()
 
 # +
 ## 인덱스 level을 기준으로 기본연산 수행
@@ -113,11 +115,11 @@ grouped.agg(np.mean)
 grouped['포인트'].agg([np.sum, np.mean, np.std])
 
 # # 2. trainsformation : agg와 달리 key값 별로 요약된 정보가 아니라, 개별 데이터의 변환을 지원함
+# - 보통, 정규화를 할 때 많이 사용. -> 내가 묶어주고 싶은 그룹을 기준으로 정규화 가능 
 
 
-# +
 ## 3. filter  : 특정조건으로 데이터를 검색할 때 사용
-
+## 필터는 true , false 값으로 return 이 되어줘야 함. 
 df.groupby('고객번호').filter(lambda x: len(x) > 2)
 
 # +
