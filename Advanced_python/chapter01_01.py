@@ -33,8 +33,12 @@ class Student(): # 클래스
         self._grade = grade
         self._details = details
 
+    # 우선순위는 str - > repr 이며, 둘다 없으면 그냥 객체를 반환
     def __str__(self):
         return 'str : {}'.format(self._name)
+
+    def __repr__(self):
+        return 'repr : {} - {}'.format(self._name , self._number)
 
 
 student1 = Student( 'Kim' ,1,  1 , {'gender':'Male', 'score1':95, 'score2' : 30})
@@ -44,3 +48,25 @@ student3 = Student( 'Park' ,3,  1 , {'gender':'Male', 'score1':95, 'score2' : 30
 
 print(student1.__dict__)  # student1 에 어떤값이 들어갔는지 다 확인할 수 있다. - 이건, 파이썬이 만들어졌을 때부터 이렇게 된거다!
 print(student1, student2, student3)
+
+
+student_list  = []
+
+student_list.append(student1)
+student_list.append(student2)
+student_list.append(student3)
+
+print()
+print(student_list)
+
+# [<__main__.Student object at 0x10f7635e0>, <__main__.Student object at 0x10f7634f0>, <__main__.Student object at 0x10f763460>]
+
+
+# __str__
+for x in student_list:
+    print(repr(x))  # print 에 repr 이라는 메소드가 있음
+    print(x)
+#str : Kim  # str   함수가 있기 때문에, print() 해줬을때, lee 가 나오게된다. str 함수가 없다면, 그냥
+# <__main__.Student object at 0x10f7635e0> - 가 나오게 된다.
+# str : Lee
+# str : Park
