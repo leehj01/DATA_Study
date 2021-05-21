@@ -60,8 +60,19 @@ class Student(object):
     def student_construct(cls, id, first_name, last_name, email , grade, tuition , gpa ):
         return cls(id, first_name, last_name, email , grade, tuition  * cls.tuition_per, gpa)
 
+    #스테이틱 메서드 - 데코레이터가 스테이틱 메서드가 붙으면 편해짐 ..?!
+    # 클래스도, 인스턴스랑도 관련이 없을 경우에 사용 - 이렇게 하면 접근하는 방법이 유연해짐 ( 2가지 방법 )
+    # cls, self 로 구분하지 않는다. 즉 넘겨받지 않는다. 내가 넘겨받는 인자로만 받는다. 
+    # 요즘은 이것이 별로 효율성이 없다!? 라는 의견이 있기도 함 - 밖에서 써도 된다! 라는 의견이 있기도 함
+    @staticmethod
+    def is_scholarship_st(inst):
+        if inst._gpa >= 4.0:
+            return '{} is a scholarship recipient.'.format(inst._last_name)
+        return 'Sorry , Not a scholarship recipient'
+
+
 # 학생 인스턴스
-student1 = Student(1, 'kim', 'arang', 'dore@naver', '1', 400, 4.5)
+student1 = Student(1, 'kim', 'arang', 'dore@naver', '1', 400, 3.5)
 student2 = Student(1, 'LEE', 'aram', 'dore@naver', '2', 500, 4.5)
 
 # 기본정보
@@ -94,7 +105,7 @@ print(student2.get_fee_culc())
 # 클래스 메소드 인스턴스 생성 실습 -  파이써닉한 코드
 # 이렇게 클래스 메소드를 사용해서 하는게, 인스턴스를 생성하는구나! 를 분명하게 알수 있기 때문에 좋다!
 student3 = Student.student_construct(3, 'Park' ,'minji', 'st@naver', '3', 550, 4.0 )
-student4 = Student.student_construct(4, 'JO' ,'ara', 'st@naver', '4', 600, 4.0 )
+student4 = Student.student_construct(4, 'JO' ,'ara', 'st@naver', '4', 600, 3.0 )
 
 # 전체 정보
 print(student3.detail_info())
@@ -105,4 +116,30 @@ print(student3._tuition)
 print(student4._tuition)
 print()
 
+# 장학금 혜택 여부 ( 스테틱 메소드 미사용 )
+def is_scholarship(inst):
+    if inst._gpa >= 4.0 :
+        return '{} is a scholarship recipient.'.format(inst._last_name)
+    return 'Sorry , Not a scholarship recipient'
 
+print(is_scholarship(student1))
+print(is_scholarship(student2))
+print(is_scholarship(student3))
+print(is_scholarship(student4))
+
+# 하지만, 위에처럼, class 로 묶이는게 아니라, 따로 있을때 -  고치려면 좀 번거러워진다.
+
+print()
+#  장학금 혜택 여부 ( 스테이틱 메소드 사용 ) - 1. 클래스로 접근 가능
+print(Student.is_scholarship_st(student1))
+print(Student.is_scholarship_st(student2))
+print(Student.is_scholarship_st(student3))
+print(Student.is_scholarship_st(student4))
+
+print()
+
+# 2. 인스턴스로도 사용가능
+print(student1.is_scholarship_st())
+print(student2.is_scholarship_st())
+print(student3.is_scholarship_st())
+print(student4.is_scholarship_st())
