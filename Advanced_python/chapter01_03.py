@@ -139,7 +139,8 @@ print(Student.is_scholarship_st(student4))
 print()
 
 # 2. 인스턴스로도 사용가능
-print(student1.is_scholarship_st())
-print(student2.is_scholarship_st())
-print(student3.is_scholarship_st())
-print(student4.is_scholarship_st())
+print('Static : ', student1.is_scholarship_st(student1))
+print('Static : ', student2.is_scholarship_st(student2))
+print('Static : ', student3.is_scholarship_st(student3))
+print('Static : ', student4.is_scholarship_st(student4))
+
