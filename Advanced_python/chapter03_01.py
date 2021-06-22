@@ -124,3 +124,32 @@ m *= 2
 print('EX6-3 -', l, m, id(l), id(m))
 
 m[0] = 10
+
+
+# sort vs sorted
+# reverse , key = len , key=str.lower, key=func(함수를 받음)
+
+f_list = ['orange', 'apple', 'mango', 'papaya','lemon','strawberry', 'coconut']
+
+# sorted: 정렬후 '새로운' 객체 반환
+
+print('EX 7-1 -', sorted(f_list))  # a, b, c, d 순서대로 정렬
+print('EX 7-2 -', sorted(f_list, reverse=True))
+print('EX 7-3 -', sorted(f_list, key=len))
+print('EX 7-4 -', sorted(f_list, key=lambda x:x[-1]))
+
+print()
+
+# sort : 정렬 후 객체 직접 변경
+
+a = f_list.sort()
+print(a, f_list)
+
+# None 을 반환한다면, 객체를 직접변경하는 함수라는 것을 알수 있음. - a 의 반환값은 None 인 이
+
+print('EX 7-5 -', f_list.sort(), f_list)
+print('EX 7-6 -', f_list.sort(reverse=True), f_list)
+print('EX 7-7 -', f_list.sort(key=lambda x:x[-1]), f_list)
+print('EX 7-8 -', f_list.sort(key=lambda x:x[-1], reverse=True), f_list)
+
+
