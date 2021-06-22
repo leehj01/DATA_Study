@@ -107,7 +107,20 @@ print('ex 5-6 : ',x , y , rest)
 
 print()
 
-# Mutable(가변 ) vs Immutable(불변)
-ㅣ =
+# Mutable(가변 ) vs Immutable(불변) - 연산자 사용에 주의하기
 
+l = (10, 15, 20)
+m = [10, 15, 20]
 
+print('EX6-1 -', l, m, id(l), id(m))
+
+l = l *2
+m = m * 2
+print('EX6-2 -', l, m, id(l), id(m))
+
+# list 는 *= 연산자를 사용하면, Id값이 안바뀌기 때문에, 바뀌고 싶으면 위에 처럼 재할당을 해야한다.
+l *= 2
+m *= 2
+print('EX6-3 -', l, m, id(l), id(m))
+
+m[0] = 10
