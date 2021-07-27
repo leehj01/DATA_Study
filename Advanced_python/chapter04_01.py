@@ -77,10 +77,51 @@ print('ex 3-5 - ', reduce(lambda x, t : x + t, range(1,11)))
 # 매직 메소드 __call__ - 호출이 가능하다는 의미
 # func() 를 사용해서 함수를 호출하듯이 호출해서 가능하는 의미
 
-# 로또 추첨 클래스
-
-import random
 
 # 로또 추첨 클래스 선언
-class LottoGame :
-    
+
+import random
+class LottoGame:
+    def __init__(self):
+        self._balls = [n for n in range(1,46)]
+
+    def pick(self):
+        random.shuffle(self._balls)
+        return sorted([random.choice(self._balls) for n in range(6)])  # 6번 뽑음
+
+    # 함수처럼 쓰기 위해서 call 을 오버라이딩 해주기
+    def __call__(self):
+        return self.pick()
+
+# 객체 생성
+game = LottoGame()
+
+# 게임 실행
+print('ex 4-1 - ', game.pick())
+
+# 호출 가능 확인
+print('ex 4-2 - ', callable(str), callable(list), callable(3.14), callable(game))  # callable 에 넣으면 호출이 가능한지를 확인 할 수있다.
+
+# -> LottoGame() 은 이렇게 사용이 안된다. 이걸 가능하게 하면, 조금더 편하기 때문에 call 을 오버로딩 해서 쓰면, 함수처럼 사용가능하게 된다.
+
+
+print('ex 4-3 - ', game())
+print('ex 4-4 -', callable(game))  # call 을 넣어주면, callable 해줌
+
+print()
+print()
+
+# 다양한 매개변수 입력 ( *args , **kwargs ) - unpacking , packing
+def args_test(name, *contents, point=None, **attrs):
+    return '<args_test> -> ({})({})({})({})'.format(name, contents, point, attrs)
+
+print('ex 5-1 -', args_test('test1')) # contents 는 패킹해서 넣기 때문에 tuple 형태로, attrs 는 딕셔너리 형태로 넣어진다.
+print('ex 5-2 -', args_test('test1', 'test2'))
+print('ex 5-3 -', args_test('test1','test2','test3',id ='admin'))
+print('ex 5-4 -', args_test('test1','test2','test3',id ='admin', point=7))
+print('ex 5-4 -', args_test('test1','test2','test3',id ='admin', point=7, password='1234'))
+
+
+print()
+print()
+
