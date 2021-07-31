@@ -125,3 +125,44 @@ print('ex 5-4 -', args_test('test1','test2','test3',id ='admin', point=7, passwo
 print()
 print()
 
+
+# 함수 Signatures
+# 코딩에서 사용할 일은 적음 - 개발자를 패키지를 만들지 않는 이상..ㅎ
+from inspect import signature
+
+# 함수의 인자에 대한 정보를 표시해주는 클래스 형태의 메소드
+# 하나 이상의 인수가 이미 할당된(채워진) 함수의 새 버전 반환
+# 함수의 새 객체 타입은 이전 함수의 자체를 기술하고 있다.
+
+sg = signature(args_test)
+
+print('ex 6-1 -' , sg)
+print('ex 6-1 -' , sg.parameters)
+
+print()
+
+# 모든 정보 출력 - 매개변수에 대해서 상세한 디스크립션
+for name, param in sg.parameters.items():
+    print('ex 6-3 - ', name, param.kind, param.default)
+
+
+# partial 사용법 : 인수 고정 -> 주로 특정 인수 고정후 콜백 함수에 사용
+
+from operator import mul
+from functools import  partial  # 함수를 도와주는 것은 여기에 있음
+
+print('ex 7-1 - ', mul(10, 100)) # 인수 두개를 받고, 그것을 곱해주는 함수
+
+# 인수를 고정
+five = partial(mul, 5)
+
+# 고정 추가
+six = partial(five, 6)
+
+print('ex 7-2 - ', five(100))
+# print('ex 7-3 - ', six(10)) # mul expected 2 arguments, got 3 이라는 에러 발생 따라서, 인자를 넣지 말아야함.
+print('ex 7-3 - ', six())
+print('ex 7-4 - ', [five(i) for i in range(1,11)])
+print('ex 7-5 - ', list(map(five, range(1,11))))
+
+
