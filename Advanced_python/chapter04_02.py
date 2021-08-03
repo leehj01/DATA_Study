@@ -91,7 +91,7 @@ def closure_avg1():
         series.append(v)
         print('def >>> {} / {}'.format(series, len(series)))
         return sum(series) / len(series)
-    return averager  # averager() 을 하면 안됨 - 이건 실행 상태
+    return averager  # averager() 을 하면 안됨 - 이건 실행 상태  # 내부 함수 반환
 
 avg_closure1 = closure_avg1()
 
@@ -117,3 +117,72 @@ print()
 print()
 
 # 잘못된 클로저 사용 예
+
+# def closure_avg2():
+#     # Free variable
+#     cnt = 0
+#     total = 0
+#     # 클로저 영역
+#     def averager(v):
+#         cnt += 1
+#         total += v
+#         return total /cnt
+#     return averager
+#
+# # Free variable 에 있는 것과 averager안에 있는 cnt, total은 별개이다.
+#
+# avg_closure2 = closure_avg2()
+#
+# print('ex 5-6' , avg_closure2(15)) # local variable 'cnt' referenced before assignment
+
+
+# 그래서 저 두영역에 있는 변수가 같은 것이라는 것을 알려주는 예약어 적어야함
+def closure_avg2():
+    # Free variable
+    cnt = 0
+    total = 0
+    # 클로저 영역
+    def averager(v):
+        nonlocal cnt, total  # 예약어 적어야 실행
+        cnt += 1
+        total += v
+        print('def2 >>> {} / {}'.format(total, cnt))
+        return total /cnt
+    return averager
+
+avg_closure2 = closure_avg2()
+print('ex 5-6 -', avg_closure2(15))
+print('ex 5-6 -', avg_closure2(35))
+print('ex 5-6 -', avg_closure2(45))
+
+# 클로저 사용하기 힘들면 위에서 적은 클래스로 사용해도됨
+
+# 데코레이터 실습
+# 1. 중복 제거, 코드 간결
+# 2. 클로저 보다 문법 간결
+# 3. 조합해서 사용 용이
+
+# 단점
+# 1. 디버깅 어려움
+# 2. 에러의 모호함
+# -> 하지만 IDE 의 도움을 받으면 됨
+
+# 클로저 패턴과 유사함
+import time
+def perf_clock(func):
+    def perf_clocked(*args):
+        # 시작 시간
+        st = time.perf_counter()
+        result = func(*args)
+        # 종료시간
+        et = time.perf_counter() - st
+        # 함수명
+        name = func.__name__
+        # 매개 변수
+        arg_str = ','.join(repr(arg) for arg in args)
+        # 출력
+        print('[%0.sfs] %s(%s) -> %r' % (et, name, arg_str, result))
+        return result
+    return perf_clocked  # 내부 함수를 반환
+
+
