@@ -4,7 +4,7 @@
 # 파이썬 함수 특징
 # Decorator & Closure
 
-# 파이썬 벼수 범위(global)
+# 파이썬 변수 범위(global)
 
 # 예제1
 def func_v1(a):
@@ -74,9 +74,16 @@ print('ex 3-3 - ' , avg_cls(40))
 # sum 함수 또한 위와 같은 코드로 만들어진 것을 알수 있다.
 
 print()
+
 # 클로저(Closure) 사용
+# 전역변수 사용 감소
+# 디자인 패턴 적용
+# 변수에 대해서 은닉화 / 캡슐화도 가능하다.
+# 조심해야하는 점이 몇개 있다.
+
 def closure_avg1():
     # 외부함수와 내부함수의 사이 - Free variable
+    # 계속 메모리를 가지고 있기 때문에, 리소스를 너무 소모할 수 있다. - 꼭 필요한 경우만 사용
     series = []  # 반환 당시 함수 유효번위를 벗어난 변수 또는 메소드
     # 클로저 영역
     def averager(v):  # 반환 당시 함수 유효범위
@@ -91,3 +98,22 @@ avg_closure1 = closure_avg1()
 print('ex 4-1 -', avg_closure1(15))
 print('ex 4-2 -', avg_closure1(35))
 print('ex 4-3 -', avg_closure1(40))
+
+print()
+
+print('ex 5-1-  ', dir(avg_closure1))
+print()
+print('ex 5-2-  ', dir(avg_closure1.__code__))  # co_freevars 라는 애가 있음
+print()
+# ('series',) 를 가지고 있음 - 즉 자기 영역밖에 있는 것도 가지고 있음을 확인할 수 있음
+print('ex 5-3-  ', avg_closure1.__code__.co_freevars)  #('series',) 가 있음
+print()
+print('ex 5-4-  ', dir(avg_closure1.__closure__[0])) # closure에도 함수처럼 속성들이 있음
+print()
+print('ex 5-5-  ', dir(avg_closure1.__closure__[0].cell_contents))
+
+
+print()
+print()
+
+# 잘못된 클로저 사용 예
