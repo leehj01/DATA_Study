@@ -181,8 +181,62 @@ def perf_clock(func):
         # 매개 변수
         arg_str = ','.join(repr(arg) for arg in args)
         # 출력
-        print('[%0.sfs] %s(%s) -> %r' % (et, name, arg_str, result))
+        print(' Result : [%0.5fs] %s(%s) -> %r' % (et, name, arg_str, result))
         return result
     return perf_clocked  # 내부 함수를 반환
 
+def time_func(seconds):
+    time.sleep(seconds)
 
+def sum_func(*numbers):
+    return sum(numbers)
+
+def fact_func(n):
+    return 1 if n < 2 else n * fact_func(n-1)
+
+# 데코레이터를 미사용
+non_deco1 = perf_clock(time_func)
+non_deco2 = perf_clock(sum_func)
+non_deco3 = perf_clock(fact_func)
+
+print('ex 7-1- ', non_deco1)  # <function perf_clock.<locals>.perf_clocked at 0x10b8b0c10>
+print('ex 7-1- ', non_deco1.__code__.co_freevars) #  ('func',)
+print('ex 7-2- ', non_deco2, non_deco2.__code__.co_freevars)
+print('ex 7-3- ', non_deco3, non_deco3.__code__.co_freevars)
+
+print('*' * 40 , 'Called Non Deco -> time_func')
+print('ex 7-4 -')
+non_deco1(2)  # 나는 time_func 실행했지만, 결과적으로 perf_clock 도 실행됨
+print('*' * 40 , 'Called Non Deco -> sum_func')
+print('ex 7-5 -')
+non_deco2(100, 200)
+print('*' * 40 , 'Called Non Deco -> fact_func')
+print('ex 7-6 -')
+non_deco3(10)
+
+print()
+print()
+
+# 데코레이터 사용 - 힘수위애 데코레이터 부분 올려주고, 그걸 그냥 사용하면 됨
+
+@perf_clock
+def time_func(seconds):
+    time.sleep(seconds)
+
+@perf_clock
+def sum_func(*numbers):
+    return sum(numbers)
+
+@perf_clock
+def fact_func(n):
+    return 1 if n < 2 else n * fact_func(n - 1)
+
+print('*' * 40 , 'Called Deco -> time_func')
+print('ex 7-7 -')
+time_func(2)  # 나는 time_func 실행했지만, 결과적으로 perf_clock 도 실행됨
+print('*' * 40 , 'Called Deco -> sum_func')
+print('ex 7-8 -')
+sum_func(100, 200)
+print('*' * 40 , 'Called Deco -> fact_func')
+print('ex 7-9 -')
+fact_func(5)
