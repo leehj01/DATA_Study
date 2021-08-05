@@ -219,6 +219,7 @@ print()
 
 # 데코레이터 사용 - 힘수위애 데코레이터 부분 올려주고, 그걸 그냥 사용하면 됨
 
+# @perf_clock # 이렇게 두개도 올릴 수 있음.
 @perf_clock
 def time_func(seconds):
     time.sleep(seconds)
