@@ -1,4 +1,4 @@
-# Chpter-01-01
+# Chpter-05-01
 # 파이썬 참조 심화
 # 파이썬 객체 참조 다양한 특징 Python Object Referrence- copy 얕은 복사 , deep copy 깊은 복사
 # 매개변수 전달 주의할 점
@@ -108,3 +108,52 @@ basket2.del_prod('Snack')
 print('ex 5-3 -', basket1._products) # Snack 도 빠져있음이 보임
 print('ex 5-4 -', basket2._products) # Orange 도 포함되어있음
 print('ex 5-5 -', basket3._products)
+
+# 함수 매개변수 전달 사용법
+
+def mul(x,y):
+    x += y
+    return x
+
+x = 10
+y = 5
+
+print('ex 6-1 - ', mul(x,y), x, y)
+
+print()
+
+a = [10, 100]
+b = [5, 10]
+print('ex 6-2 - ', mul(a, b), a, b)
+# 처음에 a가 들어갔고, 그게 변경되었다. 위에서 정수는 안변했는데, 이건 변경됨
+# 가변형일때는 원본 데이터가 변경됨
+
+c = (10, 100)
+d = (5, 10)
+print('ex 6-3 - ', mul(c, d), c, d)
+# 아이디값은 변경되지 않음.  튜플 - 불변형은 변경되지 않음
+
+# 데이터 구조에 맞춰서, 변경이 가능한지 안가능한지에 따라서 데이터 타입을 정해서 함수에 넣어줘야함
+
+# 파이썬 불변형 예외
+# 불변형인데 복사를 하지 않고, 같은 주소값을 보는 형
+# str, bytes, frozenset, Tuple : 사본생성을 하지 않고 그냥 바로 참조를 반환
+# frozenset : 아에 불변으로 만드는 데이터
+
+tt1 = (1,2,3,4,5) # 오리지널 하나의 자료형 - 안에 리스트나 그런것 없이
+tt2 = tuple(tt1) # 보통 생성자를 감싸서 쓰면, 복사가 됨.
+tt3 = tt1[:]
+
+# 하지만 튜플의 경우는 굳이 필요없기 때문에, 깊은 복사가 되지 않음.
+# 사본생성이 되지 않음
+print('ex 7-1 - ', tt1 is tt2, id(tt1), id(tt2))
+print('ex 7-2 - ', tt1 is tt3, id(tt1), id(tt3))
+
+tt4 = (10, 20, 30, 40, 50)
+tt5 = (10, 20, 30, 40, 50)
+ss1 = 'Apple'
+ss2 = 'Apple'
+
+print('ex 7-3 - ', tt4 is tt5, tt4 == tt5 , id(tt4), id(tt5))
+print('ex 7-3 - ', ss1 is ss2, ss1 == ss2 , id(ss1), id(ss2))
+# 문자열도, 같다고 생각함 참조값을 반환함. id값이 똑같음
