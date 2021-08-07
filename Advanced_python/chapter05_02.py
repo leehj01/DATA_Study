@@ -78,7 +78,87 @@ class VectorP(object): # object (이름은 아무거나 해도됨)
 v = VectorP(20, 40)
 
 # Getter, Setter
-print(v.x)
+print('ex 1-2 -', dir(v), v.__dict__) #  'x', 'y' 가 들어가있음
+print('ex 1-3 -', v.x, v.y)
 
 v.x = 10
 print(v.x)
+
+# Iter 확인
+for val in v :
+    print('ex 1-4 -', val)
+
+# __slot__
+# 파이썬 인터프리터에게 통보
+# 해당 클래스가 가지는 속성을 제한
+# __dict__ 는 해시값으로 저장하기 때문에, 많은 데이터가 담길경우, 데이터가 많이 차지할 수 있다. - 램문제가 있는 자료형
+# slot 을 사용해서 __dict__ 속상을 최적화 -> 다수 객체 생성시 -> 메모리 사용 공간 대폭 감소
+# 해당 클래스에 만들어진 인스턴스 속성 관리에 딕셔너리 대신 Set 형태를 사용
+# 지정된 속성만 사용할 수 있다. 그래서 메모리를 감소시킬 수 있다.
+
+class TestA(object):
+    __slots__ = ('a', 'b')
+
+class TestB(object):
+    pass # slot 을 사용하지 않기 때문에, 해당 인수들을 다 dict으로 관리
+
+use_slot = TestA()
+no_slot = TestB()
+
+print('ex 2-1 -', use_slot)
+# print('ex 2-1 -', use_slot.__dict__) # AttributeError: 'TestA' object has no attribute '__dict__'
+# dict 대신에 set 을 사용
+
+# 어떤 작업을 할지, 설정하고 넣으면 좀더 낫다.- 설계에 맞게 딕이든 slot이든 설정하자
+# 머신러닝 처럼 많은 데이터를 넣는 애들의 패키지는 거의 slots 으로 되어있음
+print('ex 2-2 -', no_slot)
+print('ex 2-3 -', no_slot.__dict__)
+
+# 메모리 사용량 비교 - slot을 사용하는게 더 빠르고, 사이드 이펙트도 존재하지 않는다.
+import timeit
+
+# 측정을 위한 함수 선언
+def repeat_outer(obj):
+    def repeat_inner():
+        obj.a= 'TEST'
+        del obj.a
+    return repeat_inner
+
+print(min(timeit.repeat(repeat_outer(use_slot), number=9000))) # 함수를 내가 원하는 횟수만큼 반복해서 반환해주는 함수
+print(min(timeit.repeat(repeat_outer(no_slot), number=9000)))
+
+print()
+print()
+
+# 객체 슬라이싱
+class Objects:
+    def __init__(self):
+        self._numbers = [n for n in range(1,100,3)] # 클래스 자체를 리스트 형식으로
+
+    def __len__(self):
+        return len(self._numbers)
+
+    def __getitem__(self, idx):
+        return self._numbers[idx]
+
+
+s = Objects()
+print('ex 3-1 -', s.__dict__)
+# print('ex 3-2 -', len(s)) # 만약 위에서 len 메소드를 구현 안하면, 에러가 남
+print('ex 3-2 -', len(s._numbers)) # 하지만, 이거는 위에서 Len 을 구현하지 않아도, 실행이 되낟.
+print('ex 3-3 -', s[1:10])
+print('ex 3-4 -', s[-1])
+print('ex 3-5 -', s[::10])
+
+
+print()
+print()
+
+# 파이썬 추상 클래스
+# 참고 : 파이썬 공식 문서https://docs.python.org/ko/3/library/index.html
+
+# 추상 클래스를 사용하는 이유
+# 자체적으로 객체 생성 불가
+# 상속을 통해서 자식 클래스에서 인스턴스를 생성해야 함
+# 개발과 관련된 공통된 내용  ( 필드, 메소드 ) 추출 및 통합해서 공통된 내용으로 작성하게 하는 것
+# 폰을 상속받은 객럭시 s3, v30 같은 애들은 자신만의 메소드도 물론 가짐
