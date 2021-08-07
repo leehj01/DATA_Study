@@ -162,3 +162,52 @@ print()
 # 상속을 통해서 자식 클래스에서 인스턴스를 생성해야 함
 # 개발과 관련된 공통된 내용  ( 필드, 메소드 ) 추출 및 통합해서 공통된 내용으로 작성하게 하는 것
 # 폰을 상속받은 객럭시 s3, v30 같은 애들은 자신만의 메소드도 물론 가짐
+
+# Sequence 상속 받지 않았지만, 자동으로 __iter__, __contain__ 기능 작동
+# 객체 전체를 자동으로 조사해서 -> 시퀀스 프로토콜이 작동하게 함
+class IterTestA():
+    def __getitem__(self, idx): # 튜플이나, 리스트 일때 사용하는 건데 그래서 파이썬이 똑똑하므로, iter, contain기능이 자동으로 추가
+        return range(1, 50, 2)[idx] # range(1,50,2)
+        # 만약 위에 idx 가 없다면, 아래서 슬라이싱을 해도 전체를 가져오게 됨 - 쓸모없어짐
+
+i1 = IterTestA()
+
+print('ex 4-1- ', i1[4])
+print('ex 4-2- ', i1[4:10])
+print('ex 4-3- ', 3 in  i1[1:10]) # contain method 도 자동으로 들어가져있음
+print('ex 4-4- ', [i for i in i1]) #__iter__ 도 동작이됨
+
+print()
+print()
+
+# Sequence 상속
+# 요구사항인 추상 메소드를 모두 구현해야 동작 - 위에서는 안해도 되지만 여기선 해야함
+
+from collections.abc import Sequence
+
+class IterTestB(Sequence):  # Sequence 추상 클래스를 상속 받음
+    def __getitem__(self, idx):
+        return range(1, 50, 2)[idx] # range(1,50,2)
+
+    def __len__(self, idx):
+        return len(range(1,50,2)[idx])
+
+# i2 = IterTestB()  - len 메소드를 만들지 않고 하면 아래와 같은 에러가 발생한다.
+# TypeError: Can't instantiate abstract class IterTestB with abstract methods __len__
+
+i2 = IterTestB()
+print('ex 4-1- ', i2[4])
+print('ex 4-2- ', i2[4:10])
+
+# abc 활용 예제
+import abc
+
+# 3.4 이하에서는 metaclass=abc.ABCMeta 라고 적어줘야함 - 나는 3.9임
+class RandomMachine(abc.ABC): # 추상클래스로 동작
+    # 그 이하 에서는 또 , __metaclass__ = abc.ABCMeta 라고 달아줘야함
+
+    # 추상 메소드 를 선언
+    @abc.abstractmethod # 데코레이터
+    def load(self, iterobj):
+        """iterable 항목 추가"""
+
