@@ -185,6 +185,7 @@ print()
 
 from collections.abc import Sequence
 
+# 하지만 이렇게 상속을 받는게 FM 이다!
 class IterTestB(Sequence):  # Sequence 추상 클래스를 상속 받음
     def __getitem__(self, idx):
         return range(1, 50, 2)[idx] # range(1,50,2)
@@ -196,8 +197,8 @@ class IterTestB(Sequence):  # Sequence 추상 클래스를 상속 받음
 # TypeError: Can't instantiate abstract class IterTestB with abstract methods __len__
 
 i2 = IterTestB()
-print('ex 4-1- ', i2[4])
-print('ex 4-2- ', i2[4:10])
+print('ex 4-5- ', i2[4])
+print('ex 4-6- ', i2[4:10])
 
 # abc 활용 예제
 import abc
@@ -211,3 +212,53 @@ class RandomMachine(abc.ABC): # 추상클래스로 동작
     def load(self, iterobj):
         """iterable 항목 추가"""
 
+    # 추상 메소드
+    @abc.abstractmethod
+    def pick(self, iterobj):
+        '''무작위 항목 뽑기'''
+
+    def inspect(self):
+        items = []
+        while True:
+            try:
+                items.append(self.pick())
+            except LookupError: # 더이상 찾는게 없으면 에러를 던져줌
+                break
+            return tuple(sorted(items))
+
+import random
+
+class CraneMachine(RandomMachine): #RandomMachine 을 상속 받음
+    def __init__(self, items):
+        self._randomizer = random.SystemRandom() # SystemRandom 의 타임스텝프로 뽑기의 확률을 좀더 다양하게 할수 있다.
+        self._items = []
+        self.load(items)
+
+    # load, pick 은 추상메소드이므로 아래에서 강제적으로 받아야함
+    def load(self, items):
+        self._items.extend(items)
+        self._randomizer.shuffle(self._items)  # 섞어주기
+
+    def pick(self):
+        try:
+            return self._items.pop()
+        except IndexError:
+            raise LookupError('Empty Crane Box')
+
+    def __call__(self):
+        return self.pick()
+
+# 서브클래스 확인
+# 이 부모인지 확인하는 파이썬 메소드 - 뒤에가 부모
+print('ex 5-1 -', issubclass(RandomMachine, CraneMachine))
+print('ex 5-2 -', issubclass(CraneMachine, RandomMachine))
+
+# 상속 구조 확인하는 메소드 - 상속의 가계도를 보여주는 것
+print('ex 5-3 -', CraneMachine.__mro__)
+
+cm = CraneMachine(range(1, 100)) #  @abc.abstractmethod 가 붙은 부모 메소드는 반드시 자식에서 선언해줘야한다. 즉 오버라이딩 안하면 에러
+
+print('ex 5-4 -', cm._items)
+print('ex 5-5 -', cm.pick())
+print('ex 5-6 -', cm())
+print('ex 5-7 -', cm.inspect()) # 자식에는 없는데 부모가 있는 것들
