@@ -108,3 +108,98 @@ print('EX 3-3 -', next(wt))
 print('EX 3-4 -', next(wt))
 
 # Gnerator
+
+def generator_ex1():
+    print('start')
+    yield 'AAA'
+    print('continue')
+    yield 'BBB'
+    print('end')
+
+temp = iter(generator_ex1())
+# print('ex 4-1 -', next(temp))
+# print('ex 4-2 -', next(temp))
+# print('ex 4-2 -', next(temp))  # 자동으로 StopIteration 에러발생
+
+for v in generator_ex1():
+    pass
+    # print('ex 4-3 -', v)
+
+print()
+
+# Generator 예제 2
+
+temp2 = [ x * 3 for x in generator_ex1()]
+temp3 = ( x * 3 for  x in generator_ex1())
+
+print('ex 5-1 -', temp2)
+print('ex 5-1 -', temp3) # next 함수를 호출하기 전까지는 메모리에 값을 올리지 않음. 함수 형태로 어떻게 나올지만 되어있음
+
+for i in temp2:
+    print('ex 5-2 -', i)
+
+for i in temp3:
+    print('ex 5-3 -', i)
+
+print()
+
+# Generator 예제 3 ( 자주사용하는 함수)
+
+import itertools
+
+gen1 = itertools.count(1, 2.5) # 1 부터 2.5 씩 무한대로 만들어내고 싶다.
+# next가 생성되기 전까지는, 값을 만들지 않고, next 를 만들때 값이 만들어짐 즉, 필요한 값을 미리 만들어 놓지 않는다.
+# 만약 그냥 for 문을 쓰면, print 가 무한대로 찍혀서 컴퓨터가 다운될 수 있다..ㅎ
+print('ex 6-1- ', next(gen1))
+print('ex 6-1- ', next(gen1))
+print('ex 6-1- ', next(gen1))
+print('ex 6-1- ', next(gen1))
+# ... 무한
+
+print()
+
+# 조건
+gen2 = itertools.takewhile(lambda n : n< 10, itertools.count(1, 2.5)) # 마지막 조건(종료 조건)을 넣어줌
+
+for v in gen2:
+    print('ex 6-5- ', v)
+
+print()
+
+# 필터와 반대되는 함수
+gen3 = itertools.filterfalse(lambda x : x < 3 , [ 1,2,3,4,5])
+
+for v in gen3:
+    print('ex 6-6 -', v)
+
+# 누적 함계
+gen4 = itertools.accumulate([x for x in range(1, 10)])
+
+for v in gen4:
+    print('ex 6-7 -', v)
+
+print()
+
+# 연결해주는 메소드 1
+gen5 = itertools.chain('ABCDE', range(1,11,2))
+
+print('EX 6-8 -', list(gen5))
+
+# 연결 2
+gen6 = itertools.chain(enumerate('ABCDE'))
+print('EX 6-9 -', list(gen6))
+
+# 개별로 쪼개주는 메소드
+gen7 = itertools.product('ABCDE')
+print('EX 6-10 - ', list(gen7)) # 튜플 형태로 개별적으로 쪼개줌
+
+# 연산
+gen8 = itertools.product('ABCDE', repeat=2) # 모든 경우의 수를 다 따져줌.
+print('EX 6-11 - ', list(gen8)) # 튜플 형태로 개별적으로 쪼개줌
+
+# 그룹화
+gen9 = itertools.groupby('AAABBCCCCDDEEE')
+# print('EX 6-12 - ', list(gen9))
+
+for chr, group in gen9:  # 반복되는 것을 집합으로 만들어서 따로 보관 해줌 - 형태소 검사나, 단어중요도로 문서 요약 ,어떤 유사도간의 집합을 만들때 이것을 활용할 수 있음
+    print('ex 6-12 -', chr, ' : ', list(group))
