@@ -5,7 +5,7 @@ KOSA( 한국 소프트웨어 산업협회 ) 수업부터 NLP 스터디를 기록
 
 ### 1. Advanced_python
 - FastCampus `파이썬 웹 개발 올인원 패키지 Online.` 강의 중, Advanced part 를 듣고 정리한 코드입니다.
-- [Advanded_python 을 공부하고 정리한 블로그 💬](https://hazel01.tistory.com/category/DATA%20%20ANALYSIS/Python)
+- [Advanded_python 을 공부하고 정리한 블로그 💬](https://hazel01.tistory.com/category/PROGRAMMING/Python)
 
 <br/>
 
