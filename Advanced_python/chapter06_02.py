@@ -110,3 +110,71 @@ print('ex 2-3 -', sum_ex.send(60))
 
 # while 이 true라서 계속 반복되게 됨
 # 데코레이터를 사용하면, 계속 next 를 안써도 됨
+
+print()
+print()
+
+# 코루틴 예제 3 (예외 처리)
+# coroutine 의 예외를 줘서 중지시키기
+
+class SampleException(Exception):
+    '''설명에 사용할 예외 유형'''
+
+def coroutine_except():
+    print('>>> coroutine started')
+    try:
+        while True:
+            try:
+                x = yield  # 주기만 하고 받은게 없기 때문에 NONE
+            except SampleException:
+                print('>>> SampleException handled. Continue -ing')
+            else:
+                print('>>> coroutine received : {} '.format(x))
+
+    finally:
+        print('>>> coroutine ending')
+
+exe_co = coroutine_except()
+
+print('EX 3-1 - ', next(exe_co))
+print('EX 3-2 -', exe_co.send(10)) # 주기만 하고 받은게 없기 때문에 NONE
+print('EX 3-3 -', exe_co.send(100))
+print('EX 3-2 -', exe_co.throw(SampleException))  # 예외를 던짐 - 하지만,예외를 처리했기 때문에 끝나지 않았으므로 계속 실행 가능
+print('EX 3-3 -', exe_co.send(1000))
+print('EX 3-3 -', exe_co.close())  # GEN_CLOSED  - 여기서는 끝남을 해주는 코드
+# print('EX 3-3 -', exe_co.send(1000)) # 여기서 이걸 쓰면, 에러가 발생
+
+print()
+print()
+
+# 코루틴 예제 4 ( return )
+
+def averager_re():
+    total = 0.0
+    cnt =0
+    avg =None
+    while True:
+        term = yield
+        if term is None:
+            break
+        total += term
+        cnt += 1
+        avg = total / cnt
+    return 'Average : {}'.format(avg)
+
+avger2 = averager_re()
+
+next(avger2)
+
+avger2.send(10)
+avger2.send(30)
+avger2.send(50)
+# send로 None을 보내야, 종료
+
+try:
+    avger2.send(None)
+except StopIteration as e:
+    print('EX 4-1 -', e.value) # 리턴으로 반환하는 값은 예외 처리에서 가져오는 value값에서 확인할 수 있다.
+
+# 코루틴 처리는 내부적으로 패키지들이 많이 존재하기 때문에, 직접 구현할일은 없지만
+# 원리는 아는 것이 필요하다.
