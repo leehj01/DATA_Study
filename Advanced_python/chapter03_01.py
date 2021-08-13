@@ -11,25 +11,25 @@
 
 # Non Comprehending List
 
-chars = '!@#$%^&*()_+'
-code1 = []
+chars = 'abcdefg'
+list1 = []
 for s in chars :
-    code1.append(ord(s))
+    list1.append(ord(s))
 
-print('ex 1-1  : ' , code1)
+print('ex 1-1  : ' , list1)
 
 # Comprehending List - 속도 약간 우세
-code2 = [ord(s) for s in chars]
-print( 'ex 1-2 : ', code2 )  # 성능이 위보다 좋다
+list2 = [ord(s) for s in chars]
+print('ex 1-2 : ', list2)  # 성능이 위보다 좋다
 
-code3 = [ord(s) for s in chars if ord(s) > 40 ]
-code4 = list(map(ord, chars))
-code5  = list(filter(lambda x : x > 40 , map(ord , chars))) # filter(함수, 값 )
+list3 = [ord(s) for s in chars if ord(s) > 100]
+list4 = list(map(ord, chars))
+list5 = list(filter(lambda x: x > 100, map(ord, chars))) # filter(함수, 값 )
 
-print( 'ex 1-3 : ', code3)
-print( 'ex 1-4 : ', code4)
-print( 'ex 1-5 : ', code5)
-print('ex 1-6 : ', [chr(s) for s in code1])
+print( 'ex 1-3 : ', list3)
+print( 'ex 1-4 : ', list4)
+print( 'ex 1-5 : ', list5)
+print('ex 1-6 : ', [chr(s) for s in list1])
 
 
 # Generator : iter 는 단순반복, 애네는 값을 생성해냄

@@ -31,9 +31,82 @@ c1 = coroutine1()
 print('ex 1-1 -', c1 , type(c1)) # <generator object coroutine1 at 0x000001FFAC033D48> <class 'generator'>
 
 # yield 실행 전까지 진행
-next(c1)
+# next(c1)
 # next(c1) # 또 실행하면, coroutine received : None 이면서 에러가 발생함
 # -> 원래 기본으로 None 값 을 전달
 
 # 값 전송
-c1.send(100) # coroutine received : 100
+# c1.send(100) # coroutine received : 100
+
+# 잘못된 사용
+c2 = coroutine1()
+
+# next(c2) # 이걸 입력하지 않으면, 아래와 같은 TypeError 예외 발생하게 된다.
+# c2.send(100) # TypeError: can't send non-None value to a just-started generator
+
+# 코루틴 예제2
+# GEN_CREATED : 처음 대기 상태
+# GEN_RUNNING : 한번이라도 next를 호출한 상태
+# GEN_SUSPENDED : yield 대기 상태
+# GEN_CLOSED : 실행 완료 상태
+
+def coroutine2(x):
+    print('>>> coroutine started : {}'.format(x))
+    y = yield x  # x : 메인루틴한테 전달할 값, y 는 메인 루틴한테 send로 보낼 값
+    print('>>> corountine received : {}'.format(y))
+    z = yield x + y
+    print('>>> corountine received : {}'.format(z))
+    # 왼쪽에 있는건 우리가 전달해줘야하는 값, 오른쪽은 우리한테 전송하는
+
+c3 = coroutine2(10)
+
+from inspect import getgeneratorstate # 상태값을 볼수 있는 패키지
+
+print('EX 1-2 - ', getgeneratorstate(c3))
+
+print(next(c3))
+# >>> coroutine started : 10
+# 10 # 나한테 10을 주고 10을 반환해주기 위 대기상태
+
+print('EX 1-3 - ', getgeneratorstate(c3))  # 대기상태인지 확인하기 위해 출력 - yield 대기 상태
+
+print(c3.send(15))  # 현재 z = yield x + y 서 대기상태
+
+# print(c3.send(20)) # 코루틴  - 예외
+
+print()
+print()
+
+# generator 때문에 메인과 서브로 왔다갔다 멀티 쓰레드 처럼 사용할 수 있다.
+# 항상 코루틴의 시작은 next 로 해줘야함
+
+# next 메소드를 사용하지 않고 바로 실행하기 위해서, decorator 을 이용하
+
+# 데코레이터 패턴
+from functools import wraps # 나한테 전달받는 함수를 모두 wrap - 내부 attribute 의 것을 싸고 가겠다.
+def coroutine(func):
+    '''    Decorator run until yield    '''
+    @wraps(func)
+    def primer(*args, **kwargs):
+        gen = func(*args, **kwargs)
+        next(gen)
+        return gen
+    return primer
+
+@coroutine
+def sumer(): # send 로 보내는 함수를 계속 더하는 함수
+    total = 0
+    term = 0
+    while True:
+        term = yield total
+        total += term
+
+
+
+sum_ex = sumer()
+print('ex 2-1 -', sum_ex.send(100))
+print('ex 2-2 -', sum_ex.send(40))
+print('ex 2-3 -', sum_ex.send(60))
+
+# while 이 true라서 계속 반복되게 됨
+# 데코레이터를 사용하면, 계속 next 를 안써도 됨
