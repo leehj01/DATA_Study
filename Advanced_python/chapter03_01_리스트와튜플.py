@@ -151,5 +151,3 @@ print('EX 7-5 -', f_list.sort(), f_list)
 print('EX 7-6 -', f_list.sort(reverse=True), f_list)
 print('EX 7-7 -', f_list.sort(key=lambda x:x[-1]), f_list)
 print('EX 7-8 -', f_list.sort(key=lambda x:x[-1], reverse=True), f_list)
-
-

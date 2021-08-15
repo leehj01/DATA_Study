@@ -107,7 +107,7 @@ print('EX 3-2 -', next(wt))
 print('EX 3-3 -', next(wt))
 print('EX 3-4 -', next(wt))
 
-# Gnerator
+# Generator
 
 def generator_ex1():
     print('start')
