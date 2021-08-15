@@ -31,7 +31,7 @@ NATION_LS = ('Singaproe Germany Korea Israel Norway Italy Canada France Spain').
 print(NATION_LS)
 
 # 초기 csv 위치
-TARGET_CSV = 'C:/Users/82102/Desktop/untitled/resources/nations.csv'
+TARGET_CSV = 'resources/nations.csv'
 
 # 저장 폴더 위치
 DEST_DIR = 'result'
@@ -53,9 +53,7 @@ def save_csv(data, filename):
         for row in data:
             writer.writerow(row)
 
-
-
-# 국가별 분리
+# 국가별 분리 - 읽고
 def get_sales_data(nt):
     with open(TARGET_CSV, 'r') as f:
         reader = csv.DictReader(f)
