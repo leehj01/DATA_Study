@@ -18,6 +18,7 @@ KOSA( 한국 소프트웨어 산업협회 ) 수업부터 NLP 스터디를 기록
 
 ### 3. DeepLearning 
 - FastCampus `딥러닝/인공지능 올인원 패키지 Online.` 딥러닝에 대한 부분을 공부하고 정리해둔 코드입니다. 
+- FastCampus `딥러닝/인공지능 올인원 패키지 Online.` Pytorch 부분을 듣고 정리한 코드입니다. 
 - [딥러닝에 대한 내용을 정리한 블로그 💬](https://hazel01.tistory.com/category/DATA%20%20ANALYSIS/ML%20%26%20DL)
 
 
@@ -25,7 +26,6 @@ KOSA( 한국 소프트웨어 산업협회 ) 수업부터 NLP 스터디를 기록
 
 
 ### 4. Python 
-- FastCampus `딥러닝/인공지능 올인원 패키지 Online.` Pytorch 부분을 듣고 정리한 코드입니다. 
 - 파이썬을 사용하면서, 헷갈리는 것들을 여러 예제를 통해 정리한 코드입니다. 
 - [Pytorch와 파이썬에 대해 정리한 블로그 💬](https://hazel01.tistory.com/category/DATA%20%20ANALYSIS/Python%20with%20Data)
 
