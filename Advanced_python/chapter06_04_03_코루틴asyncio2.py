@@ -28,14 +28,11 @@ urls = ['http://daum.net', 'https://google.com', 'https://apple.com', 'https://t
 
 start = timeit.default_timer()
 
+# async 가 붙은 함수만 코루틴으로 비동기처리를 할 수 있다.
 
-async def fetch(url):
+async def fetch(url, executor):
     print('Thread Name :', threading.current_thread().getName(), 'Start', url) # 현재 쓰레드가 어디인지를 나타내는 애
-    res = await urlopen(url, context=context) # await 을 안써주면, 진행안하면 멈쳐지므로, await 쓰기
-    # urlopen 는 옛날에 만들어준것으로 동기함수 !
-    # urlopen 자체가 blockoi 이기 때문에, 비동기로 해봤자 하나 실행하고 기다릴 수가 없다. 그래서 이런 에러가 발생된다.
-    # TypeError: object HTTPResponse can't be used in 'await' expression
-    # 이것을 해결하기 위해, res 만 스레드로 생성하거나, aiohttp 를 사용한다. -> 간단하게 이걸 사용하면 해결할 수있지만, 학습이기 때문에 쓰레드로 이용한다.
+    res = await loop.run_in_executor(executor, urlopen, url)  # 갯수만큼 스레딩을 붙여서 해줌
     print('Thread Name :', threading.current_thread().getName(), 'Done', url)  # 현재 쓰레드가 어디인지를 나타내는 애
     return res.read()[:5]
 
@@ -44,10 +41,13 @@ async def fetch(url):
 # 3.6 이후, 여러개의 generate 를 가지는 함수앞에는 async 가 붙는다.
 # main 이 여러가지로 진행하니깐,async
 async def main():
+    # 쓰레드 풀 생성
+    executor = ThreadPoolExecutor(max_workers=10)
+
     #  3.7이상부터 ? yield from 이 await 으로 바뀜.
     # asyncio.ensure_future 라는 함수를 씀
     # future 들이 url 갯수만큼 들어있음
-    futures = [asyncio.ensure_future(fetch(url)) for url in urls]
+    futures = [asyncio.ensure_future(fetch(url, executor)) for url in urls]
 
     rst = await asyncio.gather(*futures) # 일이 다끝난것을 모아주는 역할
 
@@ -68,7 +68,6 @@ if __name__ == '__main__':
     loop = asyncio.get_event_loop() # 여러개의 generate 가 있으면, yield로 멈추면, 다음으로 제어건을 가져오도록 흐름을 만들어주는 아이
     # 루프 대기
     loop.run_until_complete(main()) # 모든 generate 가 끝날때까지 기다려주는 함수
-
 
     # 함수 실행
     main()
