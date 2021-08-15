@@ -2,7 +2,7 @@
 # 비동기 작업
 # ThreadPool 실습 / ProcessPool 실습 / block , non-block 개념
 
-# chapter 06-03-02 파이썬 심화
+# chapter 06-03-03 파이썬 심화
 # Future 동시성
 # 비동기 작업 실행
 # 지연 시간(Block) CPU 및 리소스 낭비 방지 -> Network I/O 관련 작업에 동시성 활용 권장
@@ -24,6 +24,7 @@
 
 # 파이썬의 Global Interpreter Lock (GIL) 이란?
 # Gil은 한번에 하나 스레드만 수행 할 수 있게 인터프리터 자체에서 락을 거는 것 ( 병목현상이나, 스레드 충돌로 무한 루프로 빠질 가능성 이 있기 때문에 )
+# 그래서, 파일을 읽고 쓰는 거는 하나의 쓰레드에서 작업을 하고 이후에 멀티 쓰레드를 하는것이 빠름
 
 import os
 import time
@@ -37,7 +38,7 @@ from concurrent import futures
 
 # 국가 정보
 NATION_LS = ('Singaproe Germany Korea Israel Norway Italy Canada France Spain').split()# 대문자로 적어줘서 바뀌지 않는 정보라는 의미를 가지게 함
-print(NATION_LS)
+# print(NATION_LS)
 
 # 초기 csv 위치
 TARGET_CSV = 'resources/nations.csv'
@@ -115,19 +116,42 @@ def main(seperate_many):
         # os.cpu_count() 에서 내가 가지고 있는 cpu 의 갯수를 찾아서 넣어줌
     # 쓰레드는 cpu가 많이 잡아 먹지 않음
 
-    with futures.ProcessPoolExecutor() as excutor: # 몇개의 일꾼을 사용할건지! 에 대한 매개 변수를 받음
+    # futures
+    futures_list = []
 
-        # map은 작업 순서를 유지하고 즉시 실행됨.
-        # 갯수만큼 동시에 풀린다는 개념
+    with futures.ThreadPoolExecutor(worker) as excutor: # 몇개의 일꾼을 사용할건지! 에 대한 매개 변수를 받음
         # map 을 사용하면, 각각의 값이 에러가 발생했는지, 취소가 됬는지 확인할 수 가 없음 - 이것을 세부적으로 볼수 있는 방법도 존재 -> submit을 이용하기
-        result_cnt = excutor.map(seperate_many, sorted(NATION_LS)) # 여기서 국가 갯수만큼 동시에 실행되니깐, for문이 필요 없어짐
+        # submit -> Callable 객체를 스케줄링(실행 예약 해주는 역할) -> Future ( 하나의 task(job)으로 반환 )
+        # Map이나 submit 의 속도차이는 없다. 어차피 스레드를 활용하는 것 이기 때문에,
+        # future -> result(), done() ( 각각의 일이 잘 했는지 ) , as_complete() (모든 일이 끝날때까지 기다리기) 를 주로 사용
+        for nt in sorted(NATION_LS):
+            # future 반환
+            future = excutor.submit(seperate_many, nt)
+            # 스케쥴링
+            futures_list.append(future)
+            # 출력 1
+            # print('Scheduled for {} : {}'.format(nt, future))
+            # print()
+
+            # 스케쥴링한 것을 as_compledted 를 하면서, 결과를 볼수 있다.
+        for future in futures.as_completed(futures_list): # future_list에 담아두는 작업이 끝날 때까지
+            result = future.result() # 하나의 일이 끝났으면, result 를 반환해줌
+            done = future.done() # 하나의 일이 잘 끝났는지
+            cancel = future.cancel() # 일이 취소가 되지 않았는지 에 대한 결과값
+            cancelled = future.cancelled
+
+            # future 결과 확인
+            print('Future Result : {}, Done : {}'. format(result, done))
+            # print('Future Cancelled : {}'.format(cancel))
+            print('Future Cancelled : {}'.format(cancelled))
+
 
     # 종료 시간
     end_tm = time.time() - start_tm
 
     msg = '\n{} csv separated in {:.2f}s'
     # 최종 결과출력
-    print(msg.format(list(result_cnt), end_tm))
+    print(msg.format(list(futures_list), end_tm))
 
 # 실행
 if __name__ == '__main__': # 이것이 있어야, 불필요한 것이 실행되지 않음
