@@ -1,6 +1,6 @@
 # Chpter-05-01
 # 파이썬 참조 심화
-# 파이썬 객체 참조 다양한 특징 Python Object Referrence- copy 얕은 복사 , deep copy 깊은 복사
+# 파이썬 객체 참조 다양한 특징 PythonWithData Object Referrence- copy 얕은 복사 , deep copy 깊은 복사
 # 매개변수 전달 주의할 점
 
 

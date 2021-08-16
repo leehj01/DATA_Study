@@ -9,7 +9,7 @@
 #       format_version: '1.5'
 #       jupytext_version: 1.7.1
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: PythonWithData 3
 #     language: python
 #     name: python3
 # ---
